@@ -1,60 +1,26 @@
 import { expect, it } from "vitest";
-import type { ExamSection, QuestionSet, ReviewRecord, SingleChoiceQuestion } from "./questions";
-import { parseReviewRecord, validateQuestionSet, validateQuestionSets, validateReviewRecord } from "./questions";
-
-const distribution: Readonly<Record<ExamSection, number>> = {
-  design: 11,
-  ingest: 12,
-  store: 10,
-  analyze: 8,
-  operate: 9,
-};
-
-function validSet(): QuestionSet {
-  const questions: SingleChoiceQuestion[] = [];
-  for (const [section, count] of Object.entries(distribution) as [ExamSection, number][]) {
-    for (let index = 0; index < count; index += 1) {
-      const id = `${section}-q${index + 1}`;
-      questions.push({
-        id,
-        kind: "single",
-        section,
-        objective: "Objective",
-        prompt: "Prompt",
-        verifiedOn: "2026-08-31",
-        evidence: [{ id: "source", title: "Docs", url: "https://docs.cloud.google.com/docs", claim: "Claim" }],
-        choices: [
-          { id: "a", text: "A", feedback: "A feedback", evidenceIds: ["source"] },
-          { id: "b", text: "B", feedback: "B feedback", evidenceIds: ["source"] },
-          { id: "c", text: "C", feedback: "C feedback", evidenceIds: ["source"] },
-          { id: "d", text: "D", feedback: "D feedback", evidenceIds: ["source"] },
-        ],
-        correctChoiceId: "a",
-      });
-    }
-  }
-  return {
-    id: "valid-set",
-    version: 1,
-    title: "Valid set",
-    guideVersion: "4.2",
-    durationMinutes: 120,
-    questions,
-  };
-}
-
-function validReview(set: QuestionSet): ReviewRecord {
-  return {
-    questionSetId: set.id,
-    reviewer: "reviewer",
-    authors: ["author"],
-    reviewedOn: "2026-08-31",
-    sourceCheckCommand: "make verify-sources",
-    sourceCheckPassed: true,
-    sourceCount: 1,
-    acceptedQuestionIds: set.questions.map((question) => question.id),
-  };
-}
+import type { AnyQuestionSection, QuestionSet, SingleChoiceQuestion } from "./questions";
+import {
+  assembleCandidateQuestionSets,
+  assembleQuestionSet,
+  parseRejectionRecord,
+  parseReviewRecord,
+  validateDraftQuestionSet,
+  validateDraftQuestionSets,
+  validateQuestionSet,
+  validateQuestionSets,
+  validateRejectionRecord,
+  validateRejectionRecordFormat,
+  validateReviewRecord,
+} from "./questions";
+import {
+  buildRejectionDocument,
+  buildReviewDocument,
+  buildValidDraft as validDraft,
+  buildValidQuestionSet as validSet,
+  buildValidRejectionRecord as validRejection,
+  buildValidReviewRecord as validReview,
+} from "../test/questionSetFactory";
 
 it("accepts a structurally complete question set", () => {
   expect(validateQuestionSet(validSet())).toEqual([]);
@@ -67,7 +33,7 @@ it("rejects a non-Google evidence host", () => {
     ...set,
     questions: [{ ...question, evidence: [{ ...question.evidence[0], url: "https://example.com/docs" }] }, ...set.questions.slice(1)],
   } as QuestionSet;
-  expect(validateQuestionSet(invalid)).toContain(`${question.id}: non-Google source.`);
+  expect(validateQuestionSet(invalid)).toContain(`${question.id}: non-Google or invalid source.`);
 });
 
 it("rejects a reviewer who authored the set", () => {
@@ -88,6 +54,21 @@ it("rejects an inaccurate reviewed source count", () => {
   const set = validSet();
   const invalid = { ...validReview(set), sourceCount: 2 };
   expect(validateReviewRecord(set, invalid)).toContain("Review source count does not match unique evidence URLs.");
+});
+
+it("rejects review authors that differ from question-set authors", () => {
+  const set = validSet();
+  const invalid = { ...validReview(set), authors: ["different-author"] };
+  expect(validateReviewRecord(set, invalid)).toContain("Review record authors do not match question-set authors.");
+});
+
+it("rejects activation provenance containing rejected questions", () => {
+  const set = validSet();
+  const invalid = {
+    ...validReview(set),
+    rejectedQuestions: [{ id: set.questions[0].id, reason: "Ambiguous constraint" }],
+  };
+  expect(validateReviewRecord(set, invalid)).toContain("A review with rejected questions cannot activate a set.");
 });
 
 it("rejects an impossible calendar verification date", () => {
@@ -144,6 +125,83 @@ it("rejects duplicate question-set identifiers", () => {
 
 it("parses the machine-readable record from a review document", () => {
   const review = validReview(validSet());
-  const document = `# Review\n\n## Review Record\n\n\`\`\`json\n${JSON.stringify(review)}\n\`\`\``;
-  expect(parseReviewRecord(document)).toEqual(review);
+  expect(parseReviewRecord(buildReviewDocument(review))).toEqual(review);
+});
+
+it("parses a machine-readable rejection report", () => {
+  const rejection = validRejection(validSet());
+  expect(parseRejectionRecord(buildRejectionDocument(rejection))).toEqual(rejection);
+});
+
+it("rejects a rejection report missing a reviewed question ID", () => {
+  const rejection = validRejection(validSet());
+  const invalid = { ...rejection, questionIds: rejection.questionIds.slice(1) };
+  expect(validateRejectionRecordFormat(invalid)).toContain("Rejection record must identify all 50 questions exactly once.");
+});
+
+it("rejects duplicate reviewed question IDs in a rejection report", () => {
+  const rejection = validRejection(validSet());
+  const invalid = { ...rejection, questionIds: [...rejection.questionIds.slice(1), rejection.questionIds[1]] };
+  expect(validateRejectionRecordFormat(invalid)).toContain("Rejection record must identify all 50 questions exactly once.");
+});
+
+it("rejects an unknown rejected question ID", () => {
+  const rejection = validRejection(validSet());
+  const invalid = { ...rejection, rejectedQuestions: [{ id: "unknown", reason: "Unsupported." }] };
+  expect(validateRejectionRecordFormat(invalid)).toContain(
+    "Rejection record requires unique known question IDs with concrete reasons.",
+  );
+});
+
+it("rejects an empty rejection reason", () => {
+  const set = validSet();
+  const rejection = validRejection(set);
+  const invalid = { ...rejection, rejectedQuestions: [{ id: set.questions[0].id, reason: "" }] };
+  expect(validateRejectionRecord(set, invalid)).toContain(
+    "Rejection record requires unique known question IDs with concrete reasons.",
+  );
+});
+
+it("accepts one structurally complete draft section", () => {
+  const draft = validDraft();
+  const partialDraft = { ...draft, sections: draft.sections.slice(0, 1) };
+  expect(validateDraftQuestionSet(partialDraft)).toEqual([]);
+});
+
+it("rejects an incomplete draft section", () => {
+  const draft = validDraft();
+  const design = draft.sections[0];
+  const incomplete = { ...design, questions: design.questions.slice(0, -1) } as AnyQuestionSection;
+  const invalid = { ...draft, sections: [incomplete] };
+  expect(validateDraftQuestionSet(invalid)).toContain("design: expected 11 questions.");
+});
+
+it("rejects a question assigned to the wrong draft section", () => {
+  const draft = validDraft();
+  const design = draft.sections[0];
+  const ingestQuestion = draft.sections[1].questions[0];
+  const mismatched = { ...design, questions: [ingestQuestion, ...design.questions.slice(1)] } as AnyQuestionSection;
+  const invalid = { ...draft, sections: [mismatched] };
+  expect(validateDraftQuestionSet(invalid)).toContain(`${ingestQuestion.id}: question section does not match design.`);
+});
+
+it("rejects duplicate draft question-set identifiers", () => {
+  const draft = validDraft();
+  expect(validateDraftQuestionSets([draft, draft])).toContain(`${draft.id}: duplicate draft question-set ID.`);
+});
+
+it("refuses to assemble a question set with missing sections", () => {
+  const draft = validDraft();
+  const partialDraft = { ...draft, sections: draft.sections.slice(0, 1) };
+  expect(() => assembleQuestionSet(partialDraft)).toThrow("ingest: draft section is missing.");
+});
+
+it("assembles all complete draft sections into 50 questions", () => {
+  expect(assembleQuestionSet(validDraft()).questions).toHaveLength(50);
+});
+
+it("refuses a candidate ID without a registered draft", () => {
+  expect(() => assembleCandidateQuestionSets([], ["missing-set"])).toThrow(
+    "missing-set: candidate has no registered draft question set.",
+  );
 });

@@ -26,7 +26,7 @@ export function StartScreen({ questionSet, onStart }: StartScreenProps) {
           </>
         ) : (
           <div className="notice" role="status">
-            The first question set is undergoing independent documentation review.
+            The first question set is being authored and will remain unavailable until independent documentation review is complete.
           </div>
         )}
         <p className="disclaimer">

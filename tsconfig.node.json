@@ -9,5 +9,5 @@
     "noEmit": true,
     "types": ["node", "vite/client"]
   },
-  "include": ["vite.config.ts", "vitest.config.ts", "vitest.sources.config.ts", "playwright.config.ts", "eslint.config.js", "scripts/**/*.ts", "e2e/**/*.ts", "src/domain/questions.ts", "src/data/questionSets/**/*.ts"]
+  "include": ["vite.config.ts", "vitest.config.ts", "vitest.sources.config.ts", "playwright.config.ts", "eslint.config.js", "scripts/**/*.ts", "e2e/**/*.ts", "src/domain/questions.ts", "src/data/questionSets/index.ts", "src/data/questionSets/candidates.ts", "src/data/questionSets/drafts.ts", "src/data/questionSets/sections/**/*.ts", "src/test/fixtures.ts"]
 }

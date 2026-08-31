@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test("shows the evidence-review gate before activation", async ({ page }) => {
   await page.goto("./");
   await expect(page.getByRole("heading", { name: "Documentation-backed practice exam" })).toBeVisible();
-  await expect(page.getByRole("status")).toContainText("independent documentation review");
+  await expect(page.getByRole("status")).toContainText("being authored");
 });
 
 test("does not overflow the configured viewport", async ({ page }) => {

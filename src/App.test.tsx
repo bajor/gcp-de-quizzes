@@ -29,7 +29,7 @@ it("focuses a newly navigated question heading", async () => {
   expect(screen.getByRole("heading", { name: "Which two fixture answers are correct?" })).toHaveFocus();
 });
 
-it("submits answers and displays the exact score", async () => {
+it("displays the exact score after submission", async () => {
   const user = userEvent.setup();
   render(<App questionSet={fixtureQuestionSet} />);
   await user.click(screen.getByRole("button", { name: "Start practice exam" }));

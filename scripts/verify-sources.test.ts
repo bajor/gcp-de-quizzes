@@ -1,24 +1,43 @@
 import { expect, it } from "vitest";
-import { candidateQuestionSets } from "../src/data/questionSets";
-import { validateQuestionSets } from "../src/domain/questions";
+import { draftQuestionSets } from "../src/data/questionSets/drafts";
+import { candidateQuestionSets } from "../src/data/questionSets/candidates";
+import {
+  parseRejectionRecord,
+  validateDraftQuestionSets,
+  validateQuestionSets,
+  validateRejectionRecord,
+  validateRejectionRecordFormat,
+} from "../src/domain/questions";
+import { collectEvidenceUrls, findSourceFailures } from "./source-verification";
 
-it("validates candidate sets and fetches every evidence URL", async () => {
+const rejectionDocuments = import.meta.glob("../docs/reviews/*-rejected-*.md", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+}) as Record<string, string>;
+
+it("structurally validates draft and candidate question sets", () => {
+  expect(validateDraftQuestionSets(draftQuestionSets)).toEqual([]);
   expect(validateQuestionSets(candidateQuestionSets)).toEqual([]);
+});
 
-  const urls = new Set(
-    candidateQuestionSets.flatMap((questionSet) =>
-      questionSet.questions.flatMap((question) => question.evidence.map((source) => source.url)),
-    ),
+it("fetches every draft and candidate evidence URL", async () => {
+  const failures = await findSourceFailures(
+    collectEvidenceUrls(draftQuestionSets, candidateQuestionSets),
+    (url) => fetch(url, { redirect: "follow" }),
   );
-  const results = await Promise.all(
-    [...urls].map(async (url) => {
-      try {
-        const response = await fetch(url, { redirect: "follow" });
-        return response.ok ? null : `${url}: HTTP ${response.status}`;
-      } catch (error) {
-        return `${url}: ${error instanceof Error ? error.message : "request failed"}`;
-      }
-    }),
-  );
-  expect(results.filter((result) => result !== null)).toEqual([]);
+  expect(failures).toEqual([]);
+});
+
+it("validates every rejection report's machine-readable record", () => {
+  for (const [path, document] of Object.entries(rejectionDocuments)) {
+    const record = parseRejectionRecord(document);
+    expect(validateRejectionRecordFormat(record), path).toEqual([]);
+    const candidate = candidateQuestionSets.find((set) =>
+      set.id === record.questionSetId && set.version === record.questionSetVersion
+    );
+    expect(candidate, `${path}: rejection report has no matching registered candidate.`).toBeDefined();
+    if (!candidate) continue;
+    expect(validateRejectionRecord(candidate, record), path).toEqual([]);
+  }
 });
