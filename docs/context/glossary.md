@@ -34,6 +34,10 @@ Behavior Decision Record. An append-only specification of observable behavior an
 
 The explanation attached to one answer choice. It states why that choice does or does not satisfy the scenario and references the source-evidence identifiers that support the explanation.
 
+## Candidate question set
+
+A complete question set listed for pre-activation checks. Structural validation and live source verification run against candidate question sets; only a candidate with an accepted independent review record can enter the active registry.
+
 ## COI
 
 Conflict of Interest. A source relationship that could influence a claim; project research flags vendor-owned statements with this marker.
@@ -61,6 +65,10 @@ All question sets present in the repository, including sets that are not yet act
 ## Question set
 
 An immutable, versioned collection of exactly 50 original practice questions with a declared exam-guide version. One active question set is offered by the application.
+
+## Review record
+
+The independently authored document under `docs/reviews/` that accepts a question set for activation. Its JSON record identifies the question set, reviewer, distinct authors, review date, successful source-check command, unique source count, and every accepted question identifier.
 
 ## Source evidence
 
