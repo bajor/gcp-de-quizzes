@@ -41,6 +41,12 @@ function resolveLink(source, link, docsRoot) {
     : path.resolve(path.dirname(source), clean);
 }
 
+function linksTo(content, source, target, docsRoot) {
+  return documentLinks(content).some(
+    (link) => resolveLink(source, link, docsRoot) === path.resolve(target),
+  );
+}
+
 export async function lintDocs(root) {
   const docsRoot = path.resolve(root);
   const files = await markdownFiles(docsRoot);
@@ -74,19 +80,35 @@ export async function lintDocs(root) {
 
     if (!isReserved && relative !== "constitution.md") {
       const index = path.join(path.dirname(file), "index.md");
-      const expected = `/${relative}`;
-      if (!(contentByFile.get(index) ?? "").includes(expected)) {
+      if (!linksTo(contentByFile.get(index) ?? "", index, file, docsRoot)) {
         errors.push(`${relative}: missing from directory index`);
       }
     }
 
     if (basename === "index.md" && !isRootIndex) {
-      const rootLink = `/${relative}`;
-      if (!rootContent.includes(rootLink)) errors.push(`${relative}: index is unreachable from root`);
+      if (!linksTo(rootContent, rootIndex, file, docsRoot)) {
+        errors.push(`${relative}: index is unreachable from root`);
+      }
     }
 
     if (!isReserved && frontmatter?.status?.toLowerCase() === "superseded") {
-      if (!frontmatter.superseded_by) errors.push(`${relative}: superseded record has no superseded_by`);
+      if (!frontmatter.superseded_by) {
+        errors.push(`${relative}: superseded record has no superseded_by`);
+      } else {
+        const replacement = files.find(
+          (candidate) =>
+            path.dirname(candidate) === path.dirname(file) &&
+            path.basename(candidate).startsWith(`${frontmatter.superseded_by}-`),
+        );
+        const replacementFrontmatter = replacement
+          ? parseFrontmatter(contentByFile.get(replacement))
+          : null;
+        const currentNumber = path.basename(file).split("-")[0];
+        if (!replacement) errors.push(`${relative}: superseded_by target does not exist`);
+        else if (replacementFrontmatter?.supersedes !== currentNumber) {
+          errors.push(`${relative}: replacement does not link back with supersedes`);
+        }
+      }
     }
   }
 
