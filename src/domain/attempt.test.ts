@@ -5,7 +5,6 @@ import {
   attemptStorageKey,
   createAttempt,
   loadAttempt,
-  saveAttempt,
   scoreAttempt,
 } from "./attempt";
 
@@ -78,9 +77,8 @@ describe("answer selection", () => {
 
 describe("attempt persistence", () => {
   it("restores compatible state with the original deadline", () => {
-    const storage = memoryStorage();
     const attempt = createAttempt(fixtureQuestionSet, 1_000);
-    saveAttempt(attempt, storage);
+    const storage = memoryStorage(JSON.stringify(attempt));
     expect(loadAttempt(fixtureQuestionSet, storage)?.deadline).toBe(attempt.deadline);
   });
 

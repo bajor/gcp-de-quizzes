@@ -1,4 +1,9 @@
-import type { Choice, Evidence, QuestionSet, ReviewRecord, SingleChoiceQuestion } from "../domain/questions";
+import {
+  type Choice,
+  type Evidence,
+  type QuestionSet,
+  type SingleChoiceQuestion,
+} from "../domain/questions";
 
 const evidence: Evidence = {
   id: "source",
@@ -11,7 +16,7 @@ function choice(id: Choice["id"], text: string): Choice {
   return { id, text, feedback: `${text} feedback.`, evidenceIds: [evidence.id] };
 }
 
-export const singleQuestion: SingleChoiceQuestion = {
+export const singleQuestion = {
   id: "fixture-q1",
   kind: "single",
   section: "design",
@@ -21,7 +26,7 @@ export const singleQuestion: SingleChoiceQuestion = {
   evidence: [evidence],
   choices: [choice("a", "Correct"), choice("b", "Wrong B"), choice("c", "Wrong C"), choice("d", "Wrong D")],
   correctChoiceId: "a",
-};
+} satisfies SingleChoiceQuestion;
 
 export const multipleQuestion = {
   id: "fixture-q2",
@@ -48,16 +53,6 @@ export const fixtureQuestionSet: QuestionSet = {
   title: "Fixture set",
   guideVersion: "4.2",
   durationMinutes: 120,
-  questions: [singleQuestion, multipleQuestion],
-};
-
-export const fixtureReviewRecord: ReviewRecord = {
-  questionSetId: fixtureQuestionSet.id,
-  reviewer: "reviewer",
   authors: ["author"],
-  reviewedOn: "2026-08-31",
-  sourceCheckCommand: "make verify-sources",
-  sourceCheckPassed: true,
-  sourceCount: 1,
-  acceptedQuestionIds: [singleQuestion.id, multipleQuestion.id],
+  questions: [singleQuestion, multipleQuestion],
 };

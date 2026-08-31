@@ -11,7 +11,7 @@ timestamp: 2026-08-31T00:00:00Z
 
 ## Build and deploy the documentation-backed simulator
 
-Implement [PRD 0001](/prd/0001-documentation-backed-exam-simulator.md), [ADR 0001](/adr/0001-static-typed-application.md), [BDR 0001](/bdr/0001-exam-attempt-and-scoring.md), and [BDR 0002](/bdr/0002-question-validation-and-activation.md), based on [exam-format research](/research/0001-exam-format-and-content-policy.md).
+Implement [PRD 0001](/prd/0001-documentation-backed-exam-simulator.md), [ADR 0001](/adr/0001-static-typed-application.md), [BDR 0001](/bdr/0001-exam-attempt-and-scoring.md), and [BDR 0003](/bdr/0003-content-bound-question-activation.md), based on [exam-format research](/research/0001-exam-format-and-content-policy.md).
 
 ### Scope
 

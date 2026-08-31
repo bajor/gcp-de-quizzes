@@ -38,6 +38,10 @@ The explanation attached to one answer choice. It states why that choice does or
 
 A complete question set listed for pre-activation checks. Structural validation and live source verification run against candidate question sets; only a candidate with an accepted independent review record can enter the active registry.
 
+## Draft question set
+
+The partial manifest used while independently mergeable question sections are being authored. A draft may omit sections, but every registered section must already contain its final required question count and pass structural and live-source checks.
+
 ## COI
 
 Conflict of Interest. A source relationship that could influence a claim; project research flags vendor-owned statements with this marker.
@@ -66,9 +70,17 @@ All question sets present in the repository, including sets that are not yet act
 
 An immutable, versioned collection of exactly 50 original practice questions with a declared exam-guide version. One active question set is offered by the application.
 
+## Question section
+
+All questions assigned to one exam-guide section within a draft question set. A registered section is authored as one typed module and contains exactly 11 `design`, 12 `ingest`, 10 `store`, 8 `analyze`, or 9 `operate` questions.
+
+## Rejection record
+
+The machine-readable JSON block in an indexed rejected review report. It binds rejected question identifiers and concrete reasons to all 50 reviewed identifiers, the exact candidate version and SHA-256 content digest, reviewer, authors, review date, and source-check result.
+
 ## Review record
 
-The independently authored document under `docs/reviews/` that accepts a question set for activation. Its JSON record identifies the question set, reviewer, distinct authors, review date, successful source-check command, unique source count, and every accepted question identifier.
+The independently authored document under `docs/reviews/` that accepts a question set for activation. Its JSON record identifies the exact question-set version and SHA-256 content digest, reviewer, distinct authors, review date, successful source-check command, unique source count, and every accepted question identifier.
 
 ## Source evidence
 

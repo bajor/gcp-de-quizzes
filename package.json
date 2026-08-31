@@ -12,15 +12,18 @@
     "preview": "vite preview",
     "typecheck": "tsc -b --pretty false",
     "lint": "eslint .",
+    "create-rejection-record": "tsx scripts/create-rejection-record.ts",
+    "create-review-record": "tsx scripts/create-review-record.ts",
     "test:unit": "vitest run",
     "test:e2e": "playwright test",
     "test:sources": "vitest run --config vitest.sources.config.ts"
   },
   "dependencies": {
+    "@noble/hashes": "^2.0.1",
     "@vitejs/plugin-react": "6.1.1",
-    "vite": "8.2.2",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "vite": "8.2.2"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
@@ -28,14 +31,15 @@
     "@testing-library/jest-dom": "7.0.1",
     "@testing-library/react": "16.3.3",
     "@testing-library/user-event": "14.6.6",
+    "@types/node": "26.4.0",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.5",
-    "@types/node": "26.4.0",
     "eslint": "10.9.1",
     "eslint-plugin-react-hooks": "7.1.1",
     "eslint-plugin-react-refresh": "0.5.5",
     "globals": "17.11.0",
     "jsdom": "30.0.1",
+    "tsx": "^4.20.5",
     "typescript": "6.0.3",
     "typescript-eslint": "8.68.0",
     "vitest": "4.1.11"
