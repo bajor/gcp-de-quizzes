@@ -15,4 +15,17 @@ onboarded: 2026-08-31
 
 ## Quality Gate
 
-Run `make test` before committing application or question-bank changes. Run `make verify-sources` for question-bank changes.
+Run `make test` before committing application, documentation, or question-bank changes. Run `make verify-sources` for question-bank changes.
+
+## Maintenance Rule
+
+Whenever project structure, behavior, or documentation changes:
+
+1. Update the relevant typed document under `docs/`.
+2. Update `docs/index.md` and the document's directory index.
+3. Update architecture or behavior descriptions when their documented flow changes.
+4. Add newly named domain terms to `docs/context/glossary.md`.
+
+No structural change ships without its documentation, and no document exists without being indexed.
+
+Supersede accepted decision records instead of rewriting their history. `make docs` must pass before a documentation change ships.
