@@ -88,6 +88,10 @@ A persisted attempt is compatible only if runtime validation accepts its schema 
 | Invalid storage | Component | Incompatible or malformed persisted data | Ready screen renders and bad state is removed | Invalid storage cannot corrupt the attempt flow. |
 | Expired restoration | Component | Persisted active attempt past its deadline | Completed results render immediately | Reload cannot extend an expired attempt. |
 | Completed restoration | Component | Persisted completed attempt | Same read-only results render | Completion survives reload. |
+| Selection limit | Component | Choose-two question with two selections | Remaining unchecked choices disable until one is cleared | Multiple-select input cannot exceed its declared count. |
+| Finish confirmation | Component | Unanswered and marked questions | Dialog reports both counts before submission | Manual completion exposes review risk. |
+| Percentage format | Unit | Fractional section score | Percentage is rounded to one decimal place | Results use the documented precision. |
+| New attempt | Component | Completed attempt and restart action | Confirmation precedes replacement with blank state | Results are not discarded accidentally. |
 
 ## Related
 

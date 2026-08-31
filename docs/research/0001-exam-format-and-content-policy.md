@@ -21,7 +21,7 @@ Documented owner fact, continuity unverified: Exam guide v4.2 assigns approximat
 
 Documented owner fact, continuity unverified: Google's official sample form contains 26 assessment questions: 25 single-choice and one choose-two item. The form warns that samples do not represent the full range or difficulty. [COI: Google] [unverified - single source] [3]
 
-Documented owner policy: Google identifies distributing reconstructed exam content and using brain dumps or unauthorized question publications as misconduct. [COI: Google] [4]
+Documented owner policy, continuity unverified: Google identifies distributing reconstructed exam content and using brain dumps or unauthorized question publications as misconduct. [COI: Google] [unverified - single source] [4]
 
 Medium confidence: The public sample's scenario style favors architecture decisions constrained by cost, reliability, security, latency, or operational overhead. This is an inference from one official sample set rather than a published scoring blueprint. [inference] [3]
 
@@ -36,6 +36,8 @@ A fixed 50-question attempt is within the published range accessed on 2026-08-31
 The official sample alone cannot establish technical correctness for new scenarios. Each original question therefore needs current product documentation for every choice explanation plus an independent re-fetch and ambiguity review.
 
 ## Recommendations
+
+These recommendations use owner-controlled facts that were authoritative on the access date but cannot be independently corroborated; re-check them whenever a new set is authored.
 
 - Use 50 questions and a two-hour timer, while stating that Google publishes a 40-50 range.
 - Use the official sample only to understand style; link to it instead of reproducing it.

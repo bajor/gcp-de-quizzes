@@ -62,6 +62,10 @@ The reviewer records their agent or session identifier, the distinct authoring i
 | Live source | Integration | Unique evidence URLs | All return successful responses | Links resolved at verification time. |
 | Independent record | Integration | Missing or incomplete review record | Registry validation fails | Authoring alone cannot activate content. |
 | Review provenance | Integration | Reviewer also appears as an author, stale date, or failed source result | Registry validation fails | Review is separate, current, and evidence-backed. |
+| Duplicate identifier | Unit | Repeated question, choice, source, or set identifier | Validation fails with the duplicate | Identifiers remain unambiguous. |
+| Choice cardinality | Unit | Single-choice with five choices or choose-two with four choices | Validation fails | Published variants use the documented format. |
+| Complete provenance | Integration | Missing reviewer, author, date, command result, source count, or ID list | Validation fails | Activation requires auditable review metadata. |
+
 
 ## Related
 
