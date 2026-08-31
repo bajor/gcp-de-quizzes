@@ -2,13 +2,15 @@
 type: BDR
 title: Question validation and activation
 description: Observable evidence, structural validation, independent review, and activation behavior for question sets.
-status: Accepted
-superseded_by:
+status: Superseded
+superseded_by: 0003
 tags: [questions, sources]
 timestamp: 2026-08-31T00:00:00Z
 ---
 
 # 0002. Question validation and activation
+
+Superseded by [BDR 0003](/bdr/0003-content-bound-question-activation.md).
 
 ## Context
 
@@ -65,8 +67,6 @@ The reviewer records their agent or session identifier, the distinct authoring i
 | Duplicate identifier | Unit | Repeated question, choice, source, or set identifier | Validation fails with the duplicate | Identifiers remain unambiguous. |
 | Choice cardinality | Unit | Single-choice with five choices or choose-two with four choices | Validation fails | Published variants use the documented format. |
 | Complete provenance | Integration | Missing reviewer, author, date, command result, source count, or ID list | Validation fails | Activation requires auditable review metadata. |
-
-
 ## Related
 
 - PRD: [/prd/0001-documentation-backed-exam-simulator.md](/prd/0001-documentation-backed-exam-simulator.md)

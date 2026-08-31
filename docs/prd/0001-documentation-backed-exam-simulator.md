@@ -65,7 +65,7 @@ The static application collects no analytics. Success is therefore assessed by t
 ## Behavior
 
 - [Exam attempt and scoring behavior](/bdr/0001-exam-attempt-and-scoring.md)
-- [Question validation and activation behavior](/bdr/0002-question-validation-and-activation.md)
+- [Content-bound question validation and activation](/bdr/0003-content-bound-question-activation.md)
 
 ## Open Questions
 
@@ -75,7 +75,7 @@ None.
 
 - [Static typed application architecture](/adr/0001-static-typed-application.md)
 - [Exam attempt and scoring behavior](/bdr/0001-exam-attempt-and-scoring.md)
-- [Question validation and activation behavior](/bdr/0002-question-validation-and-activation.md)
+- [Content-bound question validation and activation](/bdr/0003-content-bound-question-activation.md)
 
 ## Related
 

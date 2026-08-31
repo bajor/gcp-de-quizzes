@@ -19,7 +19,11 @@ Run the complete documentation, type, lint, unit, build, and browser-test gate w
 make test
 ```
 
-Question-bank changes must also run `make verify-sources`. The command structurally validates every candidate set and fetches every unique evidence URL before the registry can activate that set.
+Question-bank changes must also run `make verify-sources`. The command structurally validates every registered draft section and candidate set, then fetches every unique evidence URL before activation.
+
+## Question Authoring
+
+The project-local [`gcp-pde-question-authoring`](.opencode/skills/gcp-pde-question-authoring/SKILL.md) skill defines the mandatory original-content, Google-source, typed-section, and author-handoff workflow. Complete sections are registered under `src/data/questionSets/sections/`; partial sections cannot enter the candidate or active registries. A separate session uses [`gcp-pde-question-review`](.opencode/skills/gcp-pde-question-review/SKILL.md) to perform final independent review and generate the content-bound acceptance record.
 
 ## Deployment
 
