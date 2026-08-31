@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "allowImportingTsExtensions": true,
+    "strict": true,
+    "noEmit": true,
+    "types": ["node", "vite/client"]
+  },
+  "include": ["vite.config.ts", "vitest.config.ts", "vitest.sources.config.ts", "playwright.config.ts", "eslint.config.js", "scripts/**/*.ts", "e2e/**/*.ts", "src/domain/questions.ts", "src/data/questionSets/**/*.ts"]
+}
