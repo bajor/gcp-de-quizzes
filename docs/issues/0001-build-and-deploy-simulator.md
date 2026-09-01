@@ -32,5 +32,6 @@ Deliver focused foundation, exam-section content, authoring workflow, and deploy
 
 - The simulator foundation, authoring workflow, and GitHub Pages deployment are complete.
 - The `design` section contributes 11 structurally valid, source-verified questions authored by `gpt-5.6-sol-design-20260901` and accepted in independent section review by `reviewer-design-20260901-c`.
-- The remaining `ingest`, `store`, `analyze`, and `operate` sections contribute 0 of their required 39 questions.
+- The `ingest` section contributes 12 structurally valid, source-verified questions authored by `gpt-5.6-sol-ingest-20260901` and accepted in independent section review by `reviewer-ingest-20260901-a`.
+- The remaining `store`, `analyze`, and `operate` sections contribute 0 of their required 27 questions.
 - Candidate assembly, final independent review, and activation remain blocked until all five sections are complete.
