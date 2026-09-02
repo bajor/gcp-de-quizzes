@@ -15,4 +15,4 @@ The project is governed by the [product constitution](/constitution.md).
 - [Behavior decisions](/bdr/index.md) - Observable application behavior, content-bound activation, and test design.
 - [Research](/research/index.md) - Dated evidence behind exam and content decisions.
 - [Independent reviews](/reviews/index.md) - Auditable, content-bound semantic acceptance records for active question sets.
-- [Issues](/issues/index.md) - Execution records linked to current requirements, including 11 of 50 first-set questions complete.
+- [Issues](/issues/index.md) - Execution records linked to current requirements, including 23 of 50 first-set questions complete.
